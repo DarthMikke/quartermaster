@@ -1,16 +1,23 @@
-﻿@page "/"
+@page "/settings"
 @inject IJSRuntime JS
-@inject NavigationManager NavigationManager
 
-<PageTitle>Liste</PageTitle>
+<PageTitle>Innstillingar</PageTitle>
 
-<h1>Våre ting</h1>
+<h1>Innstillingar</h1>
 
+<div>
 @if (ConnectionString != null) {
-    <p>Lastar inn våre ting...</p>
+    <label for="connection-string">Tilkoplingsdata</label>
+    <input type="text" id="connection-string" @bind="ConnectionString" />
+    @if (Edited) {
+        <button type="button" @onclick="SaveConnectionString">Save</button>
+    } else {
+        <button type="button" @onclick="SaveConnectionString" disabled>Save</button>
+    }
 } else {
     <p>Loading settings...</p>
 }
+</div>
 
 @code {
     private string? connectionString { get; set; }
@@ -29,18 +36,15 @@
     public async void GetConnectionString() {
         ConnectionString = new(await JS.InvokeAsync<string>("getCookie", "connectionString"));
         Console.WriteLine("Connection string: " + ConnectionString);
-        if (ConnectionString == "") {
-            NavigationManager.NavigateTo("/settings");
-        }
         StateHasChanged();
     }
     
     public async void SaveConnectionString() {
         string newValue = ConnectionString!;
         Console.WriteLine("Saving connection string: " + newValue);
-        ConnectionString = new(await JS.InvokeAsync<string>("setCookie", "connectionString", ConnectionString));
-        Edited = false;
+        await JS.InvokeAsync<string>("setCookie", "connectionString", ConnectionString);
         ConnectionString = newValue;
+        Edited = false;
         StateHasChanged();
     }
 }
