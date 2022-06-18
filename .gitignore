@@ -1,2 +1,4 @@
 obj/
+bin/
 wwwroot/css/
+wwwroot/js/
