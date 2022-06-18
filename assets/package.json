@@ -1,0 +1,17 @@
+{
+  "name": "blazor-template",
+  "version": "1.0.0",
+  "description": "Blazor template with scss and js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michal Jan Warecki",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-sass": "^5.1.0",
+    "sass": "^1.52.3"
+  }
+}
