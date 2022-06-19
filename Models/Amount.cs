@@ -27,6 +27,34 @@ public class Unit {
         this.Dimension = Dimension;
         this.ConversionFactor = ConversionFactor;
     }
+    public static Unit FromString(string unit) {
+        switch (unit) {
+            case "g":
+                return Unit.Gram;
+            case "kg": 
+                return Unit.Kilogram;
+            case "lbs":
+                return Unit.Pound;
+            case "oz":
+                return Unit.Ounce;
+            case "ml":
+                return Unit.Milliliter;
+            case "l":
+                return Unit.Liter;
+            case "gal":
+                return Unit.Gallon;
+            case "qt":
+                return Unit.Quart;
+            case "pt":
+                return Unit.Pint;
+            case "c":
+                return Unit.Cup;
+            case "pcs":
+                return Unit.Pieces;
+            default:
+                throw new Exception("Unknown unit");
+        }
+    }
     public string Name { get; set; }
     public Dimension Dimension { get; set; }
     public int ConversionFactor { get; set; }
