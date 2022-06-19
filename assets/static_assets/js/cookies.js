@@ -1,4 +1,3 @@
-document.addEventListener("load", (event) => {
 
 /**
  *
@@ -31,5 +30,3 @@ window.setCookie = (name, value, duration=1) => {
     now.setTime(now.getTime() + (duration*24*3600*1000));
     document.cookie = `${name}=${value}; path=/; expires=${now.toUTCString()}`;
 }
-
-});
