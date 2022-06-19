@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Quartermaster.Components
 @inject IJSRuntime JS
 @inject NavigationManager NavigationManager
 
@@ -7,7 +8,7 @@
 <h1>Våre ting</h1>
 
 @if (ConnectionString != null) {
-    <p>Lastar inn våre ting...</p>
+    <ThingsList ConnectionString=@ConnectionString />
 } else {
     <p>Loading settings...</p>
 }

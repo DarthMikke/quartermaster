@@ -1,0 +1,17 @@
+@namespace Quartermaster.Components
+@using Quartermaster.Models
+
+<div class="thing">
+    <span class="make">@thing.Make</span>
+    <span class="amount">@thing.Amount.Quantity @thing.Amount.Unit.Name</span>
+    <div class="controls">
+        <button class="btn add">+</button>
+        <span class="multiplier">@thing.Multiplier</span>
+        <button class="btn add">-</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Thing thing { get; set; }
+}

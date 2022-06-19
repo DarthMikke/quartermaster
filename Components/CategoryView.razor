@@ -1,0 +1,44 @@
+@namespace Quartermaster.Components
+@using Quartermaster.Models
+
+<div class="category">
+    <div class="controls-left">
+        <button class=@("btn " + className) type="button" @onclick="ToggleCollapsed"><i class="bi bi-caret-down-fill"></i></button>
+    </div>
+    <div class="content">
+        @Model.Name
+    </div>
+    <div class="controls-right">
+        <button class="btn" type="button"><i class="bi bi-plus-circle"></i></button>
+        <button class="btn" type="button"><i class="bi bi-three-dots-vertical"></i></button>
+    </div>
+</div>
+@if (!Collapsed) {
+@foreach (var currentThing in @Model.Things) {
+    <ThingView thing=@currentThing />
+}
+@if (@Model.Things.Count == 0) {
+    <div class="empty-list">
+        <div class="empty-list-icon">
+            <i class="bi bi-box-empty"></i>
+        </div>
+        <div class="empty-list-text">
+            <p>No things in this category.</p>
+        </div>
+    </div>
+}
+}
+
+@code {
+    [Parameter]
+    public Category Model { get; set; }
+
+    private bool Collapsed = true;
+    private string className {
+        get => Collapsed ? "collapsed" : "";
+    }
+
+    private void ToggleCollapsed() {
+        Collapsed = !Collapsed;
+    }
+}

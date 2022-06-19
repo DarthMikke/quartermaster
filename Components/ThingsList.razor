@@ -1,0 +1,59 @@
+@namespace Quartermaster.Components
+@using Quartermaster.Models
+
+@if (!loaded) {
+<p>Lastar inn våre ting...</p>
+} else {
+    foreach (var category in Categories) {
+        <CategoryView Model=@category />
+    }
+}
+
+@code {
+    [Parameter]
+    public string? ConnectionString { get; set; }
+
+    public bool loaded = false;
+    public List<Thing>? Things { get; set; } = null;
+    public List<Category>? Categories { get; set; } = null;
+
+    protected override void OnInitialized() {
+        Things = new List<Thing>();
+        Things.Add(
+            new Thing{
+                Id=1, Make="Barilla",
+                Amount=new Amount(400, Unit.Gram),
+                CategoryId=1,
+                Multiplier=2,
+            }
+        );
+        Things.Add(
+            new Thing{
+                Id=2, Make="Coop",
+                Amount=new Amount(400, Unit.Gram),
+                CategoryId=1,
+                Multiplier=1,
+            }
+        );
+
+        Categories = new List<Category>();
+        Categories.Add(new Category { Id = 1, Name = "Spaghetti" });
+        Categories.Add(new Category { Id = 2, Name = "Tagliatelle" });
+        Categories.Add(new Category { Id = 2, Name = "Kattemat" });
+
+        Categories.ForEach(
+            c => {
+                c.Things = new List<Thing>();
+                Things.ForEach(
+                    t => {
+                        if (t.CategoryId == c.Id) {
+                            c.Things.Add(t);
+                        }
+                    }
+                );
+            }
+        );
+        loaded = true;
+        StateHasChanged();
+    }
+}
