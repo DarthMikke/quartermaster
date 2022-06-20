@@ -1,5 +1,7 @@
 namespace Quartermaster.Models;
 
+using System.Text.Json.Serialization;
+
 /*
 
 */
@@ -8,6 +10,10 @@ public struct Amount {
     public Amount(int quantity, Unit unit) {
         Quantity = quantity;
         Unit = unit;
+    }
+    public Amount(int quantity, string unit) {
+        Quantity = quantity;
+        Unit = Unit.FromString(unit);
     }
 
     public int Quantity { get; set; }
@@ -22,10 +28,22 @@ public struct Amount {
 }
 
 public class Unit {
+    public string Name { get; private set; }
+    public Dimension Dimension { get; private set; }
+    public int ConversionFactor { get; private set; }
+
     public Unit(string Name, Dimension Dimension, int ConversionFactor) {
         this.Name = Name;
         this.Dimension = Dimension;
         this.ConversionFactor = ConversionFactor;
+    }
+
+    [JsonConstructor]
+    public Unit(string name) {
+        Unit parsed = Unit.FromString(name);
+        this.Name = parsed.Name;
+        this.Dimension = parsed.Dimension;
+        this.ConversionFactor = parsed.ConversionFactor;
     }
     public static Unit FromString(string unit) {
         switch (unit) {
@@ -55,9 +73,7 @@ public class Unit {
                 throw new Exception("Unknown unit");
         }
     }
-    public string Name { get; set; }
-    public Dimension Dimension { get; set; }
-    public int ConversionFactor { get; set; }
+
     public override string ToString() { return Name; }
 
     public static Unit Gram = new Unit("g", Dimension.Mass, 1);
