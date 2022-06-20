@@ -1,5 +1,6 @@
 @namespace Quartermaster.Components
 @using Quartermaster.Models
+@inject HttpClient Http
 
 @if (!loaded) {
 <p>Lastar inn våre ting...</p>
@@ -11,36 +12,18 @@
 
 @code {
     [Parameter]
-    public string? ConnectionString { get; set; }
+    public string? Token { get; set; }
 
     public bool loaded = false;
     public List<Thing>? Things { get; set; } = null;
     public List<Category>? Categories { get; set; } = null;
 
-    protected override void OnInitialized() {
-        Things = new List<Thing>();
-        Things.Add(
-            new Thing{
-                Id=1, Make="Barilla",
-                Amount=new Amount(400, Unit.Gram),
-                CategoryId=1,
-                Multiplier=2,
-            }
-        );
-        Things.Add(
-            new Thing{
-                Id=2, Make="Coop",
-                Amount=new Amount(400, Unit.Gram),
-                CategoryId=1,
-                Multiplier=1,
-            }
-        );
+    public string Server = "http://localhost:8000/quartermaster/";
 
-        Categories = new List<Category>();
-        Categories.Add(new Category { Id = 1, Name = "Spaghetti" });
-        Categories.Add(new Category { Id = 2, Name = "Tagliatelle" });
-        Categories.Add(new Category { Id = 2, Name = "Kattemat" });
+    protected override async Task OnInitializedAsync() {
+        Things = await Http.GetFromJsonAsync<List<Thing>?>(Server + "api/things/");
 
+        Categories = await Http.GetFromJsonAsync<List<Category>?>(Server + "api/categories/");
         Categories.ForEach(
             c => {
                 c.Things = new List<Thing>();
