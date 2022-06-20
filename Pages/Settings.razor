@@ -7,13 +7,21 @@
 
 <div>
 @if (ConnectionString != null) {
-    <label for="connection-string">Tilkoplingsdata</label>
+    <div>
+    <label for="connection-string">Token</label>
     <input type="text" id="connection-string" @bind="ConnectionString" />
+    </div>
+    <div>
+    <label for="server">Server</label>
+    <input type="url" id="server" @bind="Server" />
+    </div>
+    <div>
     @if (Edited) {
-        <button type="button" @onclick="SaveConnectionString">Save</button>
+        <button type="button" @onclick="SaveConnectionData">Save</button>
     } else {
-        <button type="button" @onclick="SaveConnectionString" disabled>Save</button>
+        <button type="button" @onclick="SaveConnectionData" disabled>Save</button>
     }
+    </div>
 } else {
     <p>Loading settings...</p>
 }
@@ -25,25 +33,32 @@
         Edited = !(connectionString == null);
         connectionString = value;
     } }
+    private string? server { get; set; }
+    public string? Server { get => server; private set {
+        Edited = !(server == null);
+        server = value;
+    } }
     public bool Edited = false;
 
-    override protected Task OnInitializedAsync() {
-        this.GetConnectionString();
-
-        return base.OnInitializedAsync();
+    override protected async Task OnInitializedAsync() {
+        this.GetConnectionData();
     }
 
-    public async void GetConnectionString() {
-        ConnectionString = new(await JS.InvokeAsync<string>("getCookie", "connectionString"));
+    public async void GetConnectionData() {
+        ConnectionString = new(await JS.InvokeAsync<string>("getCookie", "accessToken"));
         Console.WriteLine("Connection string: " + ConnectionString);
+        Server = new(await JS.InvokeAsync<string>("getCookie", "serverUrl"));
+        Console.WriteLine("Server URL: " + Server);
         StateHasChanged();
     }
     
-    public async void SaveConnectionString() {
+    public async void SaveConnectionData() {
         string newValue = ConnectionString!;
         Console.WriteLine("Saving connection string: " + newValue);
-        await JS.InvokeAsync<string>("setCookie", "connectionString", ConnectionString);
+        await JS.InvokeAsync<string>("setCookie", "accessToken", ConnectionString);
         ConnectionString = newValue;
+        await JS.InvokeAsync<string>("setCookie", "serverUrl", Server);
+        Console.WriteLine("Server URL: " + Server);
         Edited = false;
         StateHasChanged();
     }

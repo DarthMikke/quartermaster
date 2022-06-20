@@ -7,17 +7,22 @@
 
 <h1>Våre ting</h1>
 
-@if (ConnectionString != null) {
-    <ThingsList ConnectionString=@ConnectionString />
+@if (AccessToken != null && Server != null) {
+    <ThingsList Token=@AccessToken />
 } else {
     <p>Loading settings...</p>
 }
 
 @code {
-    private string? connectionString { get; set; }
-    public string? ConnectionString { get => connectionString; private set {
-        Edited = !(connectionString == null);
-        connectionString = value;
+    private string? accessToken { get; set; }
+    public string? AccessToken { get => accessToken; private set {
+        Edited = !(accessToken == null);
+        accessToken = value;
+    } }
+    private string? server { get; set; }
+    public string? Server { get => server; private set {
+        Edited = !(server == null);
+        server = value;
     } }
     public bool Edited = false;
 
@@ -28,20 +33,16 @@
     }
 
     public async void GetConnectionString() {
-        ConnectionString = new(await JS.InvokeAsync<string>("getCookie", "connectionString"));
-        Console.WriteLine("Connection string: " + ConnectionString);
-        if (ConnectionString == "") {
+        AccessToken = new(await JS.InvokeAsync<string>("getCookie", "accessToken"));
+        Console.WriteLine("Access token: " + AccessToken);
+        if (AccessToken == "") {
             NavigationManager.NavigateTo("/settings");
         }
-        StateHasChanged();
-    }
-    
-    public async void SaveConnectionString() {
-        string newValue = ConnectionString!;
-        Console.WriteLine("Saving connection string: " + newValue);
-        ConnectionString = new(await JS.InvokeAsync<string>("setCookie", "connectionString", ConnectionString));
-        Edited = false;
-        ConnectionString = newValue;
+        Server = new(await JS.InvokeAsync<string>("getCookie", "serverUrl"));
+        Console.WriteLine("Server URL: " + Server);
+        if (Server == "") {
+            NavigationManager.NavigateTo("/settings");
+        }
         StateHasChanged();
     }
 }
