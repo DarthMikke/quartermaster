@@ -95,3 +95,13 @@ body {
     scale: 150%;
     width: 20px;
 }
+
+.add-category .btn {
+    position: fixed;
+    width: 45px;
+    height: 45px;
+    border-radius: 22px;
+    background: blue;
+    bottom: 20px;
+    right: 20px;
+}
