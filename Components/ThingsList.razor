@@ -2,6 +2,7 @@
 @using Quartermaster.Models
 @inject HttpClient Http
 
+<div class="list-wrapper">
 @if (!loaded) {
 <p>Lastar inn våre ting...</p>
 } else {
@@ -9,6 +10,7 @@
         <CategoryView Model=@category />
     }
 }
+</div>
 
 @code {
     [Parameter]
