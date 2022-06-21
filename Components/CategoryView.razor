@@ -9,10 +9,15 @@
         @Model.Name
     </div>
     <div class="controls-right">
-        <button class="btn" type="button"><i class="bi bi-plus-circle"></i></button>
+        <button class="btn" type="button"
+        @onclick="ToggleAdding"
+        ><i class="bi bi-plus-circle"></i></button>
         <button class="btn" type="button"><i class="bi bi-three-dots-vertical"></i></button>
     </div>
 </div>
+@if (adding) {
+    <ThingView thing=@(new Thing(this.Model.Id)) editing=@true/>
+}
 @if (!Collapsed) {
 @foreach (var currentThing in @Model.Things) {
     <ThingView thing=@currentThing />
@@ -38,7 +43,12 @@
         get => Collapsed ? "collapsed" : "";
     }
 
+    private bool adding = false;
+
     private void ToggleCollapsed() {
         Collapsed = !Collapsed;
+    }
+    private void ToggleAdding() {
+        adding = !adding;
     }
 }

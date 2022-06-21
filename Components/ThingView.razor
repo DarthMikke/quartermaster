@@ -16,6 +16,9 @@
     [Parameter]
     public Thing thing { get; set; }
 
+    [Parameter]
+    public bool editing { get; set; } = false;
+
     private void Decrease() {
         API.DecreaseThing(thing);
     }
