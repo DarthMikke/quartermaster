@@ -1,17 +1,25 @@
 @namespace Quartermaster.Components
 @using Quartermaster.Models
+@inject QuartermasterAPI API
 
 <div class="thing">
     <span class="make">@thing.Make</span>
     <span class="amount">@thing.Amount.Quantity @thing.Amount.Unit.Name</span>
     <div class="controls">
-        <button class="btn add">+</button>
+        <button class="btn add" @onclick="Decrease">-</button>
         <span class="multiplier">@thing.Multiplier</span>
-        <button class="btn add">-</button>
+        <button class="btn add" @onclick="Increase">+</button>
     </div>
 </div>
 
 @code {
     [Parameter]
     public Thing thing { get; set; }
+
+    private void Decrease() {
+        API.DecreaseThing(thing);
+    }
+    private void Increase() {
+        API.IncreaseThing(thing);
+    }
 }
