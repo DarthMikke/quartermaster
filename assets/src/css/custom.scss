@@ -101,7 +101,19 @@ body {
     width: 45px;
     height: 45px;
     border-radius: 22px;
-    background: blue;
+    background: rgb(210, 15, 245);
+    box-shadow: 6px 3px 30px grey;
     bottom: 20px;
     right: 20px;
+
+    .bi {
+        color: white;
+    }
+
+    &:hover {
+        bottom: 23px;
+        right: 23px;
+    }
+
+    transition: all 0.5s;
 }
