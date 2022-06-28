@@ -6,7 +6,8 @@ using System.Text.Json.Serialization;
 
 */
 
-public struct Amount {
+public class Amount {
+    [JsonConstructor]
     public Amount(int quantity, Unit unit) {
         Quantity = quantity;
         Unit = unit;
@@ -20,16 +21,19 @@ public struct Amount {
     public Unit Unit { get; set; }
 
     public static Amount operator +(Amount left, Amount right) {
-    return new Amount {
-        Quantity = left.Quantity + right.Quantity*right.Unit.ConversionFactor/left.Unit.ConversionFactor,
-        Unit = left.Unit
-    };
+    return new Amount(
+        left.Quantity + right.Quantity*right.Unit.ConversionFactor/left.Unit.ConversionFactor,
+        left.Unit);
     }
 }
 
 public class Unit {
     public string Name { get; private set; }
+
+    [JsonIgnore]
     public Dimension Dimension { get; private set; }
+
+    [JsonIgnore]
     public int ConversionFactor { get; private set; }
 
     public Unit(string Name, Dimension Dimension, int ConversionFactor) {
