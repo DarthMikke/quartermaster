@@ -3,8 +3,14 @@
 @inject QuartermasterAPI API
 
 <div class="thing">
-    <span class="make">@thing.Make</span>
-    <span class="amount">@thing.Amount.Quantity @thing.Amount.Unit.Name</span>
+    @if (editing) {
+        <button class="btn" @onclick="ToggleEditing"><i class="bi bi-check"></i></button>
+        <input class="make" @bind="make" type="text"></input>
+        <input class="amount" @bind="quantity" type="number"></input>
+    } else {
+        <span class="make" @onclick="ToggleEditing">@thing.Make</span>
+        <span class="amount">@thing.Amount.Quantity @thing.Amount.Unit.Name</span>
+    }
     <div class="controls">
         <button class="btn add" @onclick="Decrease">-</button>
         <span class="multiplier">@thing.Multiplier</span>
@@ -16,8 +22,21 @@
     [Parameter]
     public Thing thing { get; set; }
 
+    private string make { get => thing.Make ?? ""; set {
+        thing.Make = value;
+    } }
+    private int quantity { get => thing.Amount.Quantity; set { 
+        thing.Amount.Quantity = value;
+    } }
+
     [Parameter]
     public bool editing { get; set; } = false;
+    [Parameter]
+    public EventCallback? callback { get; set; }
+
+    public void ToggleEditing() {
+        editing = !editing;
+    }
 
     private void Decrease() {
         API.DecreaseThing(thing);

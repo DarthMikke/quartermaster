@@ -1,6 +1,7 @@
 @namespace Quartermaster.Components
 @using Quartermaster.Models
 @inject HttpClient Http
+@inject QuartermasterAPI API
 
 <div class="list-wrapper">
 @if (!loaded) {
@@ -24,6 +25,8 @@
     public string Server = "http://localhost:8000/quartermaster/";
 
     protected override async Task OnInitializedAsync() {
+        API.Initialize(Server, Http);
+
         Things = await Http.GetFromJsonAsync<List<Thing>?>(Server + "api/things/");
 
         Categories = await Http.GetFromJsonAsync<List<Category>?>(Server + "api/categories/");

@@ -6,5 +6,8 @@ public class Category {
 
     public List<Thing>? Things { get; set; }
 
-    
+    public void AddThing(Thing thing) {
+        if (Things == null) { Things = new List<Thing>(); }
+        Things.Add(thing);
+    }
 }

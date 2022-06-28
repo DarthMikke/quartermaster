@@ -1,5 +1,6 @@
 @namespace Quartermaster.Components
 @using Quartermaster.Models
+@inject QuartermasterAPI API
 
 <div class="category">
     <div class="controls-left">
@@ -10,14 +11,11 @@
     </div>
     <div class="controls-right">
         <button class="btn" type="button"
-        @onclick="ToggleAdding"
+        @onclick="AddThing"
         ><i class="bi bi-plus-circle"></i></button>
         <button class="btn" type="button"><i class="bi bi-three-dots-vertical"></i></button>
     </div>
 </div>
-@if (adding) {
-    <ThingView thing=@(new Thing(this.Model.Id)) editing=@true/>
-}
 @if (!Collapsed) {
 @foreach (var currentThing in @Model.Things) {
     <ThingView thing=@currentThing />
@@ -48,7 +46,12 @@
     private void ToggleCollapsed() {
         Collapsed = !Collapsed;
     }
-    private void ToggleAdding() {
-        adding = !adding;
+
+    private async Task AddThing() {
+        var thing = new Thing(Model.Id);
+        thing = await API.AddThing(thing);
+        this.Model.AddThing(thing);
+        Console.WriteLine(this.Model.Things?.Count());
+        StateHasChanged();
     }
 }
