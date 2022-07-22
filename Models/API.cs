@@ -26,16 +26,31 @@ class QuartermasterAPI
     }
 
     public async Task<U> Put<T, U>(string path, T? content) where U: class {
+
+    public async Task<U?> Put<T, U>(string path, T? content) where U: class
+    {
         Console.WriteLine($"PUT {path}");
-        if (!IsInitialized) return null;
-        HttpContent encodedContent = content == null ? new StringContent("") : encodedContent = JsonContent.Create<T>(content);
+        if (Http == null) {
+            Console.WriteLine("API not initialized");
+            return null;
+        }
+        HttpContent encodedContent = content == null ? new StringContent("") : JsonContent.Create<T>(content);
         var response = await Http!.PutAsync(this.BaseURL + path, encodedContent);
         var decodedResponse = await response.Content.ReadFromJsonAsync<U>();
         return decodedResponse;
     }
 
-    public void Update()
+    public async Task<U?> Patch<T, U>(string path, T? content) where U: class 
     {
+        Console.WriteLine($"PATCH {path}");
+        if (Http == null) {
+            Console.WriteLine("API not initialized");
+            return null;
+        }
+        HttpContent encodedContent = content == null ? new StringContent("") : JsonContent.Create<T>(content); 
+        var response = await Http!.PatchAsync(this.BaseURL + path, encodedContent);
+        var decodedResponse = await response.Content.ReadFromJsonAsync<U>();
+        return decodedResponse;
         // Get categories & things from the server
     }
 
@@ -44,13 +59,11 @@ class QuartermasterAPI
 
     }
 
-    public async Task<Thing> AddThing(Thing thing) {
+    public async Task<Thing> AddThing(Thing thing)
+    {
         Console.WriteLine("Adding a new thing…");
-        if (Http == null) {
-            Console.WriteLine("API not initialized");
-            return thing;
-        }
-        var content = JsonContent.Create<Thing>(thing);
+
+        /* var content = JsonContent.Create<Thing>(thing);
         //var content = new StringContent(Encoding.UTF8.GetString(JsonSerializer.SerializeToUtf8Bytes<Thing>(thing)));
         Console.WriteLine(Encoding.Default.GetString(await content.ReadAsByteArrayAsync()));
         foreach (var header in content.Headers) {
@@ -65,8 +78,9 @@ class QuartermasterAPI
             Console.WriteLine($"{key}: [ {values} ]");
         }
         
-        var response = await Http.PutAsync(BaseURL + "api/things/", content);
-        Console.WriteLine($"Id assigned by back-end: {thing.Id}");
+        var response = await Http.PutAsync(BaseURL + "api/things/", content);*/
+        var response = await this.Put<Thing, Thing>("api/things/", thing);
+        Console.WriteLine($"Id assigned by back-end: {response.Id}");
         return thing;
     }
 
