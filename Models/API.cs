@@ -108,12 +108,13 @@ class QuartermasterAPI
         var response = await Http.PutAsync(BaseURL + "api/things/", content);*/
         var response = await this.Put<Thing, Thing>("api/things/", thing);
         Console.WriteLine($"Id assigned by back-end: {response.Id}");
-        return thing;
+        return response;
     }
 
-    public void IncreaseThing(Thing thing) {
+    public async void IncreaseThing(Thing thing) {
         thing.Multiplier += 1;
-        Console.WriteLine(thing.Make);
+        var response = await this.Patch<Thing, Thing>($"api/things/{thing.Id}", thing);
+        Console.WriteLine($"{response.Make}: {response.Amount}");
     }
 
     public void DecreaseThing(Thing thing) {
