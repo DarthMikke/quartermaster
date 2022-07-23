@@ -94,6 +94,13 @@ public class Unit {
     public static Unit Gallon = new Unit("gal", Dimension.Volume, 3785);
 
     public static Unit Pieces = new Unit("pcs", Dimension.Count, 1);
+
+    public static Unit[] All = {
+        Unit.Gram, Unit.Kilogram, Unit.Pound, Unit.Ounce,
+        Unit.Milliliter, Unit.Liter, Unit.FluidOunce, Unit.Cup, Unit.Pint,
+        Unit.Quart, Unit.Gallon,
+        Unit.Pieces
+    };
 }
 
 public enum Dimension {

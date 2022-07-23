@@ -7,6 +7,11 @@
         <button class="btn" @onclick="ToggleEditing"><i class="bi bi-check"></i></button>
         <input class="make" @bind="make" type="text"></input>
         <input class="amount" @bind="quantity" type="number"></input>
+        <select>
+            @foreach(var unit in Unit.All) {
+                <option value=@unit.Name>@unit.Name</option>
+            }
+        </select>
     } else {
         <span class="make" @onclick="ToggleEditing">@thing.Make</span>
         <span class="amount">@thing.Amount.Quantity @thing.Amount.Unit.Name</span>
