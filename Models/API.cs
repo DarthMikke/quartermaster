@@ -25,19 +25,46 @@ class QuartermasterAPI
         Http = http;
     }
 
-    public async Task<U> Put<T, U>(string path, T? content) where U: class {
-
-    public async Task<U?> Put<T, U>(string path, T? content) where U: class
+    private async Task<U?> request<T, U>(string method, string path, T? content) where U: class
     {
-        Console.WriteLine($"PUT {path}");
+        Console.WriteLine($"{method} {path}");
         if (Http == null) {
             Console.WriteLine("API not initialized");
             return null;
         }
         HttpContent encodedContent = content == null ? new StringContent("") : JsonContent.Create<T>(content);
+        HttpResponseMessage? response;
+
+        switch (method)
+        {
+            case "GET":
+                response = await Http!.GetAsync(this.BaseURL + path);
+                break;
+            case "PUT":
+                response = await Http!.PutAsync(this.BaseURL + path, encodedContent);
+                break;
+            case "PATCH":
+                response = await Http!.PatchAsync(this.BaseURL + path, encodedContent);
+                break;
+            case "DELETE":
+                response = await Http!.DeleteAsync(this.BaseURL + path);
+                break;
+            default:
+                Console.WriteLine("Unknown HTTP method");
+                return null;
+        }
+        var decodedResponse = await response!.Content.ReadFromJsonAsync<U>();
+        return decodedResponse;
+    }
+
+    public async Task<U?> Put<T, U>(string path, T? content) where U: class
+    {
+        return await request<T, U>("PUT", path, content);
+
+        /*HttpContent encodedContent = content == null ? new StringContent("") : JsonContent.Create<T>(content);
         var response = await Http!.PutAsync(this.BaseURL + path, encodedContent);
         var decodedResponse = await response.Content.ReadFromJsonAsync<U>();
-        return decodedResponse;
+        return decodedResponse;*/
     }
 
     public async Task<U?> Patch<T, U>(string path, T? content) where U: class 
