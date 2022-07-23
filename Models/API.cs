@@ -111,18 +111,28 @@ class QuartermasterAPI
         return response;
     }
 
-    public async void IncreaseThing(Thing thing) {
+    public async void IncreaseThing(Thing thing)
+    {
         thing.Multiplier += 1;
-        var response = await this.Patch<Thing, Thing>($"api/things/{thing.Id}", thing);
+        var response = await UpdateThing(thing);
         Console.WriteLine($"{response.Make}: {response.Amount}");
     }
 
-    public void DecreaseThing(Thing thing) {
+    public async void DecreaseThing(Thing thing)
+    {
         thing.Multiplier -= 1;
-        Console.WriteLine(thing.Make);
+        var response = await UpdateThing(thing);
+        Console.WriteLine($"{response.Make}: {response.Amount}");
     }
 
-    public void DeleteThing(Thing thing) {
+    public async Task<Thing> UpdateThing(Thing thing)
+    {
+        var response = await this.Patch<Thing, Thing>($"api/things/{thing.Id}", thing);
+        return response;
+    }
+
+    public void DeleteThing(Thing thing)
+    {
 
     }
 }
