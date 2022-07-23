@@ -41,6 +41,10 @@
 
     public void ToggleEditing() {
         editing = !editing;
+        if (editing == false)
+        {
+            API.UpdateThing(thing);
+        }
     }
 
     private void Decrease() {
