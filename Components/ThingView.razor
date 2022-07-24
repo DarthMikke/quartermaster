@@ -9,12 +9,12 @@
         <input class="amount" @bind="quantity" type="number"></input>
         <select @onchange="UpdateUnit">
             @foreach(var unit in Unit.All) {
-                <option value=@unit.Name>@unit.Name</option>
+                <option value=@unit.Name selected=@(unit.Name == thing.Amount.Unit.Name)>@unit.Name</option>
             }
         </select>
     } else {
         <span class="make" @onclick="ToggleEditing">@thing.Make</span>
-        <span class="amount">@thing.Amount.Quantity @thing.Amount.Unit.Name</span>
+        <span class="amount" @onclick="ToggleEditing">@thing.Amount.Quantity @thing.Amount.Unit.Name</span>
     }
     <div class="controls">
         <button class="btn add" @onclick="Decrease">-</button>

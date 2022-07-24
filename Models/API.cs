@@ -81,9 +81,13 @@ class QuartermasterAPI
         // Get categories & things from the server
     }
 
-    public void AddCategory(Category category)
+    public async Task<Category> AddCategory(Category category)
     {
+        Console.WriteLine("Adding a new category…");
 
+        var response = await this.Put<Category, Category>("api/categories/", category);
+        Console.WriteLine($"Id assigned by back-end: {response.Id}");
+        return response;
     }
 
     public async Task<Thing> AddThing(Thing thing)

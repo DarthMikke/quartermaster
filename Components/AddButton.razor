@@ -1,6 +1,17 @@
 @namespace Quartermaster.Components
 @using Quartermaster.Models
+@inject QuartermasterAPI API
 
 <div class="add-category">
-    <button class="btn"><i class="bi bi-plus-circle"></i></button>
+    <button class="btn" @onclick="AddCategory"><i class="bi bi-plus-circle"></i></button>
 </div>
+
+@code {
+    [Parameter]
+    public EventCallback<int> callback { get; set; }
+
+    private async Task AddCategory() {
+        Console.WriteLine("Button pushed");
+        await callback!.InvokeAsync(1);
+    }
+}

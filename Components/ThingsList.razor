@@ -10,7 +10,7 @@
     foreach (var category in Categories) {
         <CategoryView Model=@category />
     }
-<AddButton />
+<AddButton callback=@AddCategory />
 }
 </div>
 
@@ -44,5 +44,13 @@
         );
         loaded = true;
         StateHasChanged();
+    }
+
+    private async Task AddCategory(int value) {
+        Category category = new Category { Id=0, Name="Ny kategori"};
+        var new_category = await API.AddCategory(category);
+        new_category.Things = new List<Thing>();
+        Categories.Add(new_category);
+        return;
     }
 }
