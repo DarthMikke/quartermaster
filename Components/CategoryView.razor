@@ -7,7 +7,13 @@
         <button class=@("btn " + className) type="button" @onclick="ToggleCollapsed"><i class="bi bi-caret-down-fill"></i></button>
     </div>
     <div class="content">
-        @Model.Name
+        @if (editing) {
+            <button class="btn" @onclick="ToggleEditing"><i class="bi bi-check"></i></button>
+            <input @bind="Model.Name" type="text"></input>
+        } else {
+            <span @onclick="ToggleEditing">@Model.Name</span>
+        }
+
     </div>
     <div class="controls-right">
         <button class="btn" type="button"
@@ -41,10 +47,17 @@
         get => Collapsed ? "collapsed" : "";
     }
 
-    private bool adding = false;
+    private bool editing = false;
 
     private void ToggleCollapsed() {
         Collapsed = !Collapsed;
+    }
+
+    private async Task ToggleEditing() {
+        editing = !editing;
+        if (!editing) {
+            Console.WriteLine("Saving changes to the category.");
+        }
     }
 
     private async Task AddThing() {
